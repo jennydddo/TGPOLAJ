@@ -21,20 +21,22 @@ for event in event.get():
         elif event.key == K_a: 
             speed = -5 
     elif event.type == KEYUP: 
-       if event.key == K_d:
+        if event.key == K_d:
             speed = 0 
         elif event.key == K_a: 
             speed = 0
-shift += speed  
-local_shift = shift % width
-window.blit("background",(local_shift,0))
-if local_shift != 0: 
-    window.blit("background",(local_shift - width,0))
+
 width = 1200
 left_bound = width / 40 
 right_bound = width - left_bound
 if screen.rect.x > right_bound or screen.rect.x < left_bound: 
     screen.rect.x -= shift 
+
+shift += speed  
+local_shift = shift % width
+window.blit("background",(local_shift,0))
+if local_shift != 0: 
+    window.blit("background",(local_shift - width,0))
 
 class Platform(sprite.Sprite): 
     def __init__(self,x,y,w,h,color): 
