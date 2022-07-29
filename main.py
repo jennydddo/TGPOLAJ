@@ -1,4 +1,7 @@
 from pygame import * 
+width = 1200
+height = 600
+window = display.set_mode((height, width))
 
 class GameSprite(sprite.Sprite):
     def __init__(self, imageFile, x, y, width, height, speed):
@@ -26,11 +29,10 @@ for event in event.get():
         elif event.key == K_a: 
             speed = 0
 
-width = 1200
 left_bound = width / 40 
 right_bound = width - left_bound
-if screen.rect.x > right_bound or screen.rect.x < left_bound: 
-    screen.rect.x -= shift 
+# if screen.rect.x > right_bound or screen.rect.x < left_bound: 
+#     screen.rect.x -= shift
 
 shift += speed  
 local_shift = shift % width
