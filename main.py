@@ -1,3 +1,4 @@
+from turtle import back
 from pygame import * 
 
 class GameSprite(sprite.Sprite):
@@ -40,36 +41,40 @@ window = display.set_mode((1000,670))
 background = transform.scale(image.load("scifi background.webp"),(1000,670))
 clock = time.Clock()
 
-flag = True
-while flag:
-    for e in event.get():
-            if e.type == QUIT:
-                flag = False
-            if event.type == KEYDOWN: 
-                if event.key == K_d:
-                    speed = 5 
-                elif event.key == K_a: 
-                    speed = -5 
-            elif event.type == KEYUP: 
-                if event.key == K_d:
-                    speed = 0 
-                elif event.key == K_a: 
-                    speed = 0
-    window.blit(background,(0,0))
+
 shift = 0 
 speed = 0
 width = 1200
 shift += speed  
 local_shift = shift % width
-window.blit("scifi background.webp",(local_shift,0))
-if local_shift != 0: 
-    window.blit("scifi background.webp",(local_shift - width,0))
+# window.blit(background,(local_shift,0))
+# if local_shift != 0: 
+#     window.blit(background,(local_shift - width,0))
 
 left_bound = width / 40 
 right_bound = width - left_bound
-if screen.rect.x > right_bound or screen.rect.x < left_bound: 
-    shift -= screen.rect.x 
-for s in all_sprites: 
-    screen.rect.x -= (maincharacter).x.speed 
+# if screen.rect.x > right_bound or screen.rect.x < left_bound: 
+#     shift -= screen.rect.x 
+# for s in all_sprites: 
+#     screen.rect.x -= (maincharacter).x.speed 
+#     display.update()
+#     clock.tick(60)
+
+
+flag = True
+while flag:
+    for e in event.get():
+            if e.type == QUIT:
+                flag = False
+            if e.type == KEYDOWN: 
+                if e.key == K_d:
+                    speed = 5 
+                elif e.key == K_a: 
+                    speed = -5 
+            elif e.type == KEYUP: 
+                if e.key == K_d:
+                    speed = 0 
+                elif e.key == K_a: 
+                    speed = 0
+    window.blit(background,(0,0))
     display.update()
-    clock.tick(60)
