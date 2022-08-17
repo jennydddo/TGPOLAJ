@@ -12,32 +12,6 @@ class GameSprite(sprite.Sprite):
     def update(self):
         window.blit(self.image,(self.rect.x, self.rect.y))
 
-shift = 0 
-speed = 0
-for event in event.get():
-    if event.type == KEYDOWN: 
-        if event.key == K_d:
-            speed = 5 
-        elif event.key == K_a: 
-            speed = -5 
-    elif event.type == KEYUP: 
-        if event.key == K_d:
-            speed = 0 
-        elif event.key == K_a: 
-            speed = 0
-
-width = 1200
-left_bound = width / 40 
-right_bound = width - left_bound
-if screen.rect.x > right_bound or screen.rect.x < left_bound: 
-    screen.rect.x -= shift 
-
-shift += speed  
-local_shift = shift % width
-window.blit("background",(local_shift,0))
-if local_shift != 0: 
-    window.blit("background",(local_shift - width,0))
-
 class Platform(sprite.Sprite): 
     def __init__(self,x,y,w,h,color): 
         super().__init__()
@@ -59,7 +33,8 @@ class MovingPlatform(Platform):
     player = None
 def update(self):
     self.rect.x += self.change_x
-
+#draw the wall using the Platfrom class 
+wall1 = Platform(30,30,30,30,(0,0,0))
     
 window = display.set_mode((1000,670))
 background = transform.scale(image.load("scifi background.webp"),(1000,670))
@@ -70,7 +45,31 @@ while flag:
     for e in event.get():
             if e.type == QUIT:
                 flag = False
+            if event.type == KEYDOWN: 
+                if event.key == K_d:
+                    speed = 5 
+                elif event.key == K_a: 
+                    speed = -5 
+            elif event.type == KEYUP: 
+                if event.key == K_d:
+                    speed = 0 
+                elif event.key == K_a: 
+                    speed = 0
     window.blit(background,(0,0))
+shift = 0 
+speed = 0
+width = 1200
+shift += speed  
+local_shift = shift % width
+window.blit("scifi background.webp",(local_shift,0))
+if local_shift != 0: 
+    window.blit("scifi background.webp",(local_shift - width,0))
 
+left_bound = width / 40 
+right_bound = width - left_bound
+if screen.rect.x > right_bound or screen.rect.x < left_bound: 
+    shift -= screen.rect.x 
+for s in all_sprites: 
+    screen.rect.x -= (maincharacter).x.speed 
     display.update()
     clock.tick(60)
