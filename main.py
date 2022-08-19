@@ -32,11 +32,14 @@ class MovingPlatform(Platform):
     boundary_left = 0
     boundary_right = 0
     player = None
-def update(self):
-    self.rect.x += self.change_x
+    def update(self):
+        self.rect.x += self.change_x
+
+
 #draw the wall using the Platfrom class 
-wall1 = Platform(30,30,30,30,(0,0,0))
-    
+wall1 = Platform(100,100,100,100,(0,0,0))
+
+
 window = display.set_mode((1000,670))
 background = transform.scale(image.load("scifi background.webp"),(1000,670))
 clock = time.Clock()
@@ -64,17 +67,18 @@ right_bound = width - left_bound
 flag = True
 while flag:
     for e in event.get():
-            if e.type == QUIT:
-                flag = False
-            if e.type == KEYDOWN: 
-                if e.key == K_d:
-                    speed = 5 
-                elif e.key == K_a: 
-                    speed = -5 
-            elif e.type == KEYUP: 
-                if e.key == K_d:
-                    speed = 0 
-                elif e.key == K_a: 
-                    speed = 0
+        if e.type == QUIT:
+            flag = False
+        if e.type == KEYDOWN: 
+            if e.key == K_d:
+                speed = 5 
+            elif e.key == K_a: 
+                speed = -5 
+        elif e.type == KEYUP: 
+            if e.key == K_d:
+                speed = 0 
+            elif e.key == K_a: 
+                speed = 0
+        wall1.draw() 
     window.blit(background,(0,0))
     display.update()
