@@ -1,3 +1,4 @@
+from threading import local
 from pygame import * 
 win_width = 1200
 win_height = 600
@@ -11,17 +12,21 @@ class GameSprite(sprite.Sprite):
         self.rect.y = y
         self.speed = speed
 
-
+local_shift = 0
 class Player(GameSprite):
     def move(self):
+        global local_shift
         keys = key.get_pressed()
         if keys[K_a] and self.rect.x > 0:
             self.rect.x -= self.speed
-        if keys[K_d] and self.rect.x < (win_width - self.rect.x):
+        if keys[K_d]:
             self.rect.x += self.speed
+            local_shift = max(self.rect.x - win_width + 50, 0)
+            wall1.rect.x -= local_shift
+            self.rect.x = min(self.rect.x, win_width - 50)
         if keys[K_w] and self.rect.y > 0:
             self.rect.y -= self.speed
-        if keys[K_s] and self.rect.y < (win_height - self.rect.y):
+        if keys[K_s] and self.rect.y < (win_height - 50):
             self.rect.y += self.speed
 
     def update(self):
@@ -71,13 +76,14 @@ class Souls(GameSprite):
 
 class Weapon(GameSprite):
     # soul consumption on weapon or ability use...
-    # if souls > 0:
-    #     # use weapon then minus soul
-    #     keybind = key.get_pressed()
-    #     if keybind[K_q]:
-    #         # use weapon , enemy killed
-    #         souls -= 3
-    pass
+    def shoot(self, souls):
+        if souls > 0:
+            # use weapon then minus soul
+            keybind = key.get_pressed()
+            if keybind[K_q]:
+                # use weapon , enemy killed
+                souls -= 3
+    
     
 window = display.set_mode((win_width, win_height))
 background = transform.scale(image.load("scifi background.webp"),(win_width,win_height))
@@ -134,5 +140,7 @@ while flag:
     laser.update()
     
     wall1.draw()
+    wall1.update()
+    print(local_shift, male.rect.x)
     display.update()
     clock.tick(60)
