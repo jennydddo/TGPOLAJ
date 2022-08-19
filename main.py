@@ -1,33 +1,42 @@
-from turtle import back
 from pygame import * 
 width = 1200
 height = 600
-window = display.set_mode((height, width))
 
 class GameSprite(sprite.Sprite):
     def __init__(self, imageFile, x, y, width, height, speed):
         super().__init__()
-        self.image = transform.scale(image.load(imageFile),(width,height))
+        self.image = transform.scale(image.load(imageFile), (width, height))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.speed = speed
-    
+
+
+class Player(GameSprite):
+    def move(self):
+        keys = key.get_pressed()
+        if keys[K_a] and self.rect.x > 0:
+            self.rect.x -= self.speed
+        if keys[K_d] and self.rect.x < (win_width - self.rect.x):
+            self.rect.x += self.speed
+        if keys[K_w] and self.rect.y > 0:
+            self.rect.y -= self.speed
+        if keys[K_s] and self.rect.y < (win_height - self.rect.y):
+            self.rect.y += self.speed
+
     def update(self):
-        window.blit(self.image,(self.rect.x, self.rect.y))
+        window.blit(self.image, (self.rect.x, self.rect.y))
 
-shift = 0 
-speed = 0
-left_bound = width / 40 
-right_bound = width - left_bound
-# if screen.rect.x > right_bound or screen.rect.x < left_bound: 
-#     screen.rect.x -= shift
+    def gravity(self):
+        self.rect.y += self.speed
+        # if is_touching_ground:
+        # space = key.get_pressed()
+        # if space[K_w] and self.rect.y > 0:
+        # self.rect.y -= self.speed
 
-shift += speed  
-local_shift = shift % width
-window.blit("background",(local_shift,0))
-if local_shift != 0: 
-    window.blit("background",(local_shift - width,0))
+
+class Enemy(GameSprite):
+    pass
 
 class Platform(sprite.Sprite): 
     def __init__(self,x,y,w,h,color): 
@@ -51,13 +60,41 @@ class MovingPlatform(Platform):
     player = None
 def update(self):
     self.rect.x += self.change_x
+
+class Souls(GameSprite):
+    pass
+    # enemy death by colidding with player, weapons, etc...
+    # Example code: if sprite.collide_rect(spaceship, alien):
+    # if on_enemy_death:
+    # souls += 1
+
+
+class Weapon(GameSprite):
+    # soul consumption on weapon or ability use...
+    pass
+    if souls > 0:
+        # use weapon then minus soul
+        keybind = key.get_pressed()
+        if keybind[K_q]:
+            # use weapon , enemy killed
+            souls -= 3
+
     
 #draw the wall using the Platfrom class 
 wall1 = Platform(30,30,30,30,(0,0,0))
     
-window = display.set_mode((1000,670))
+window = display.set_mode((height, width))
 background = transform.scale(image.load("scifi background.webp"),(1000,670))
 clock = time.Clock()
+
+window = display.set_mode((1000, 670))
+# background = transform.scale(image.load("scifi background.png"),(1000,670))
+clock = time.Clock()
+male = Player("New Piskel.gif", 30, 400, 70, 70, 5)
+enemy = Enemy("New Piskel1.gif", 700, 400, 70, 70, 5)
+flag = True
+# please draw the walls and input parameters jenny -lucas
+souls = 0
 
 
 shift = 0 
@@ -79,20 +116,28 @@ right_bound = width - left_bound
 #     clock.tick(60)
 
 
-flag = True
+
+laser = Weapon("deathlaser.png", 30, 30, 200, 200, 5)
+
 while flag:
     for e in event.get():
-            if e.type == QUIT:
-                flag = False
-            if e.type == KEYDOWN: 
-                if e.key == K_d:
-                    speed = 5 
-                elif e.key == K_a: 
-                    speed = -5 
-            elif e.type == KEYUP: 
-                if e.key == K_d:
-                    speed = 0 
-                elif e.key == K_a: 
-                    speed = 0
+        if e.type == QUIT:
+            flag = False
+        if e.type == KEYDOWN: 
+            if e.key == K_d:
+                speed = 5 
+            elif e.key == K_a: 
+                speed = -5 
+        elif e.type == KEYUP: 
+            if e.key == K_d:
+                speed = 0 
+            elif e.key == K_a: 
+                speed = 0
+
     window.blit(background,(0,0))
+    male.update()
+    male.move()
+    enemy.update()
+    laser.update()
     display.update()
+    clock.tick(60)
