@@ -1,6 +1,6 @@
 from pygame import * 
-width = 1200
-height = 600
+win_width = 1200
+win_height = 600
 
 class GameSprite(sprite.Sprite):
     def __init__(self, imageFile, x, y, width, height, speed):
@@ -58,8 +58,8 @@ class MovingPlatform(Platform):
     boundary_left = 0
     boundary_right = 0
     player = None
-def update(self):
-    self.rect.x += self.change_x
+    def update(self):
+        self.rect.x += self.change_x
 
 class Souls(GameSprite):
     pass
@@ -71,25 +71,18 @@ class Souls(GameSprite):
 
 class Weapon(GameSprite):
     # soul consumption on weapon or ability use...
+    # if souls > 0:
+    #     # use weapon then minus soul
+    #     keybind = key.get_pressed()
+    #     if keybind[K_q]:
+    #         # use weapon , enemy killed
+    #         souls -= 3
     pass
-    if souls > 0:
-        # use weapon then minus soul
-        keybind = key.get_pressed()
-        if keybind[K_q]:
-            # use weapon , enemy killed
-            souls -= 3
-
     
-#draw the wall using the Platfrom class 
-wall1 = Platform(30,30,30,30,(0,0,0))
-    
-window = display.set_mode((height, width))
-background = transform.scale(image.load("scifi background.webp"),(1000,670))
+window = display.set_mode((win_width, win_height))
+background = transform.scale(image.load("scifi background.webp"),(win_width,win_height))
 clock = time.Clock()
 
-window = display.set_mode((1000, 670))
-# background = transform.scale(image.load("scifi background.png"),(1000,670))
-clock = time.Clock()
 male = Player("New Piskel.gif", 30, 400, 70, 70, 5)
 enemy = Enemy("New Piskel1.gif", 700, 400, 70, 70, 5)
 flag = True
@@ -118,7 +111,7 @@ right_bound = width - left_bound
 
 
 laser = Weapon("deathlaser.png", 30, 30, 200, 200, 5)
-
+wall1 = Platform(100,100,50,50,(0,0,0))
 while flag:
     for e in event.get():
         if e.type == QUIT:
@@ -139,5 +132,7 @@ while flag:
     male.move()
     enemy.update()
     laser.update()
+    
+    wall1.draw()
     display.update()
     clock.tick(60)
